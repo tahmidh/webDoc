@@ -1,0 +1,90 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body {
+  background: #272c32;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 62.5%;
+  font-size: 1.2rem;
+  padding-top: 20px;
+}
+h1 {
+  color: #FFF;
+  display: block;
+  font-size: 2em;
+  margin: 0;
+  margin-bottom: 25px;
+}
+form {
+  width: 400px;
+  padding: 20px;
+  margin: auto;
+}
+form ::-webkit-input-placeholder {
+  text-transform: uppercase;
+}
+form :-moz-placeholder {
+  /* Firefox 18- */
+  text-transform: uppercase;
+}
+form ::-moz-placeholder {
+  /* Firefox 19+ */
+  text-transform: uppercase;
+}
+form :-ms-input-placeholder {
+  text-transform: uppercase;
+}
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+input[type="text"],
+input[type="tel"] {
+  border: 2px solid #FFF;
+  width: 100%;
+  padding: 10px;
+  color: #272c32;
+  margin-bottom: 1em;
+}
+input[type="text"]:focus,
+input[type="tel"]:focus {
+  border: 2px solid #4cb182;
+  outline: 0;
+}
+input[type="submit"] {
+  background: #408F6A;
+  border: 0;
+  padding: 10px 16px;
+  color: #fff;
+  font-weight: 800;
+  width: auto;
+  font-size: 1rem;
+  margin: 0;
+}
+input[type="submit"]:hover {
+  background: #4cb182;
+}
+input[type="text"]:after {
+  content: 'ddd';
+  background: #ccc;
+  height: 40px;
+  width: 40px;
+}
+.ph {
+  position: absolute;
+  right: 0px;
+  top: 3px;
+  padding: 8px 16px 9px;
+  background: #4cb182;
+  color: #fff;
+  display: none;
+  font-size: 1rem;
+}
+.error {
+  border: 2px solid red !important;
+}
