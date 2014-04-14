@@ -42,8 +42,7 @@
             die("Failed to run query: " . $ex->getMessage()); 
         } 
          
-        // The fetch() method returns an array representing the "next" row from 
-        // the selected results, or false if there are no more rows to fetch. 
+        
         $row = $stmt->fetch(); 
          
         // If a row was returned, then we know a matching username was found in 

@@ -1,10 +1,52 @@
 <?php 
+
+    // First we execute our common code to connection to the database and start the session 
     require("common.php"); 
+     
+    // At the top of the page we check to see whether the user is logged in or not 
     if(empty($_SESSION['user'])) 
     { 
+        // If they are not, we redirect them to the login page. 
         header("Location: login.php"); 
+         
+        // Remember that this die statement is absolutely critical.  Without it, 
+        // people can view your members-only content without logging in. 
         die("Redirecting to login.php"); 
     } 
+    $query_params = array( 
+            ':user_id' => $_SESSION['user']['id'], 
+        );
+    $query = " 
+        SELECT   
+            email,
+            name,
+            age,
+            sex,
+            ssn,
+            blood_gp,
+            dob,
+            contact 
+        FROM users 
+    "; 
+     $query .= " 
+            WHERE 
+                id = :user_id 
+        "; 
+    try 
+    { 
+        // These two statements run the query against your database table. 
+        $stmt = $db->prepare($query); 
+        $result = $stmt->execute($query_params); 
+    } 
+    catch(PDOException $ex) 
+    { 
+        // Note: On a production website, you should not output $ex->getMessage(). 
+        // It may provide an attacker with helpful information about your code.  
+        die("Failed to run query: " . $ex->getMessage()); 
+    } 
+         
+    // Finally, we can retrieve all of the found rows into an array using fetchAll 
+    $rows = $stmt->fetchAll(); 
 ?> 
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +70,7 @@
       <div class="masthead">
         <h3 class="text-muted">WebDoc</h3>
         <ul class="nav nav-justified">
-          <li class="active"><a href="user.php">Home</a></li>
+          <li ><a href="user.php">Home</a></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Get Appointment<b class="caret"></b></a>
             <ul class="dropdown-menu">
@@ -39,7 +81,7 @@
               <li><a href="appt_doc.php">Appointment for Doctor</a></li>
             </ul>
           </li> <!-- drop down list for vaccination / doctor -->
-          <li class="dropdown">
+          <li class="active" class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Profile<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="view_profile.php">View Profile</a></li>
@@ -70,44 +112,34 @@
           </li>
         </ul>
       </div>
-
-      <!-- Jumbotron -->
-      <div class="jumbotron">
-        <h1>WebDoctor!</h1>
-        <p class="lead">Discover treatment options with the new <b>Symptom Checker</b> </p>
-        <p>This interactive decision guide helps identify the underlying cause of common symptoms.</p>
-        <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
-      </div>
-
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-lg-4">
-          <h2>Safari bug warning!</h2>
-          <p class="text-danger">As of v7.0.1, Safari exhibits a bug in which resizing your browser horizontally causes rendering errors in the justified nav that are cleared upon refreshing.</p>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
-        </div>
-        <div class="col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
-       </div>
-        <div class="col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
-          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
-        </div>
-      </div>
-
-      <!-- Site footer -->
-      <div class="footer">
-        <p>&copy; Company 2014</p>
-      </div>
-
-    </div> <!-- /container -->
-
-
-    <!-- Bootstrap core JavaScript
+<br><br>
+        <h2>User Profile</h2>
+        <table class="table"> 
+            <tr> 
+                <th>Email</th> 
+                <th>Name</th> 
+                <th>Age</th> 
+                <th>Gender</th> 
+                <th>SSN</th> 
+                <th>Blood Group</th>
+                <th>Date of Birth</th>
+                <th>Contact</th>  
+            </tr> 
+            <?php foreach($rows as $row): ?> 
+                <tr> 
+                    <td><?php echo htmlentities($row['email'], ENT_QUOTES, 'UTF-8'); ?></td>
+                    <td><?php echo htmlentities($row['name'], ENT_QUOTES, 'UTF-8'); ?></td> 
+                    <td><?php echo htmlentities($row['age'], ENT_QUOTES, 'UTF-8'); ?></td> 
+                    <td><?php echo htmlentities($row['sex'], ENT_QUOTES, 'UTF-8'); ?></td> 
+                    <td><?php echo htmlentities($row['ssn'], ENT_QUOTES, 'UTF-8'); ?></td> 
+                    <td><?php echo htmlentities($row['blood_gp'], ENT_QUOTES, 'UTF-8'); ?></td>
+                    <td><?php echo htmlentities($row['dob'], ENT_QUOTES, 'UTF-8'); ?></td>
+                    <td><?php echo htmlentities($row['contact'], ENT_QUOTES, 'UTF-8'); ?></td>   
+                </tr> 
+            <?php endforeach; ?> 
+        </table> 
+       
+<!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

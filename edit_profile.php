@@ -8,92 +8,22 @@
     } 
      
     if(!empty($_POST)) 
-    { 
-        if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) 
-        { 
-            die("Invalid E-Mail Address"); 
-        } 
+    {  
           
-        if($_POST['email'] != $_SESSION['user']['email']) 
+        if(!empty($_POST['name']))
         { 
-            // Define our SQL query 
-            $query = " 
-                SELECT 
-                    1 
-                FROM users 
-                WHERE 
-                    email = :email 
-            "; 
-             
-            // Define our query parameter values 
-            $query_params = array( 
-                ':email' => $_POST['email'] 
-            ); 
-             
-            try 
-            { 
-                // Execute the query 
-                $stmt = $db->prepare($query); 
-                $result = $stmt->execute($query_params); 
-            } 
-            catch(PDOException $ex) 
-            { 
-                die("Failed to run query: " . $ex->getMessage()); 
-            } 
-              
-            $row = $stmt->fetch(); 
-            if($row) 
-            { 
-                die("This E-Mail address is already in use"); 
-            } 
-        } 
-         
-        if(!empty($_POST['password'])) 
-        { 
-            $salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647)); 
-            $password = hash('sha256', $_POST['password'] . $salt); 
-            for($round = 0; $round < 65536; $round++) 
-            { 
-                $password = hash('sha256', $password . $salt); 
-            } 
-        } 
-        else 
-        { 
-            $password = null; 
-            $salt = null; 
-        } 
-         
+
         // Initial query parameter values 
         $query_params = array( 
-            ':email' => $_POST['email'], 
+            ':name' => $_POST['name'], 
             ':user_id' => $_SESSION['user']['id'], 
-        ); 
-         
-        // If the user is changing their password, then we need parameter values 
-        // for the new password hash and salt too. 
-        if($password !== null) 
-        { 
-            $query_params[':password'] = $password; 
-            $query_params[':salt'] = $salt; 
-        } 
-         
+        );  
         
         $query = " 
             UPDATE users 
             SET 
-                email = :email 
+                name = :name 
         "; 
-         
-       
-        if($password !== null) 
-        { 
-            $query .= " 
-                , password = :password 
-                , salt = :salt 
-            "; 
-        } 
-         
-        
         $query .= " 
             WHERE 
                 id = :user_id 
@@ -108,12 +38,41 @@
         catch(PDOException $ex) 
         {  
             die("Failed to run query: " . $ex->getMessage()); 
+        }
+      }
+        $query = " 
+            UPDATE users
+            SET
+                age = :age, 
+                ssn = :ssn, 
+                blood_gp = :blood_gp, 
+                dob = :dob,
+                contact = :contact
+           "; 
+        $query .= " 
+            WHERE 
+                id = :user_id 
+        "; 
+          $query_params = array( 
+            ':age' => $_POST['age'],  
+            ':ssn' => $_POST['ssn'],
+            ':blood_gp' => $_POST['blood'],
+            ':dob' => $_POST['dob'],
+            ':contact' => $_POST['contact'],
+            ':user_id' => $_SESSION['user']['id'], 
+        ); 
+         
+        try 
+        { 
+            // Execute the query to create the user 
+            $stmt = $db->prepare($query); 
+            $result = $stmt->execute($query_params); 
         } 
-         
-        $_SESSION['user']['email'] = $_POST['email']; 
-         
-    } 
-     
+        catch(PDOException $ex) 
+        { 
+            die("Failed to run query: " . $ex->getMessage()); 
+        } 
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -148,7 +107,7 @@
               <li><a href="appt_doc.php">Appointment for Doctor</a></li>
             </ul>
           </li> <!-- drop down list for vaccination / doctor -->
-          <li class="dropdown">
+          <li class="active" class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Profile<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="view_profile.php">View Profile</a></li>
@@ -170,7 +129,7 @@
               <li><a href="#">One more separated link</a></li>
             </ul>
           </li>
-          <li class="active" class="dropdown">
+          <li  class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello <?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?><b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="edit_account.php">Edit Account</a></li>
@@ -179,36 +138,63 @@
           </li>
         </ul>
       </div>
-<form class="form-horizontal" action="edit_account.php" method="post">
+<form class="form-horizontal" action="edit_profile.php" method="post">
 <fieldset>
 
 <!-- Form Name -->
-<legend>Edit Account</legend>
+<legend>Edit Profile</legend>
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="textinput">Username:</label>  
+  <label class="col-md-4 control-label" for="name">Name</label>  
   <div class="col-md-4">
-    <div class="form-control input-md"><?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?></div>
-  
-  </div>
-</div>
-
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="email">E-Mail Address:</label>  
-  <div class="col-md-4">
-  <input id="email" name="email" type="text" placeholder="" class="form-control input-md" value="<?php echo htmlentities($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8'); ?>">
+  <input id="name" name="name" type="text" placeholder=""  class="form-control input-md">
     
   </div>
 </div>
 
-<!-- Password input-->
+<!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="password">Password:</label>
+  <label class="col-md-4 control-label" for="age">Age</label>  
   <div class="col-md-4">
-    <input id="password" name="password" type="password" placeholder="" class="form-control input-md">
-    <span class="help-block">leave blank if you do not want to change your password</span> 
+  <input id="age" name="age" type="text" placeholder="" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="ssn">SSN</label>  
+  <div class="col-md-4">
+  <input id="ssn" name="ssn" type="text" placeholder="" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="blood">Blood Group</label>  
+  <div class="col-md-4">
+  <input id="blood" name="blood" type="text" placeholder="" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="dob">Date Of Birth</label>  
+  <div class="col-md-4">
+  <input id="dob" name="dob" type="text" placeholder="" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="contact">Contact</label>  
+  <div class="col-md-4">
+  <input id="contact" name="contact" type="text" placeholder="" class="form-control input-md">
+    
   </div>
 </div>
 

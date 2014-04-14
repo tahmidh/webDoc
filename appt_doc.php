@@ -1,11 +1,52 @@
 <?php 
     require("common.php"); 
+     
     if(empty($_SESSION['user'])) 
     { 
         header("Location: login.php"); 
         die("Redirecting to login.php"); 
     } 
-?> 
+     
+    if(!empty($_POST)) 
+    {  
+         $query = " 
+            INSERT INTO appointment ( 
+                appt_name, 
+                time, 
+                date, 
+                detail,
+                user_id,
+                appt_for
+            ) VALUES ( 
+                :appt_name, 
+                :time, 
+                :date, 
+                :detail,
+                :user_id,
+                :appt_for
+            ) 
+        "; 
+          $query_params = array( 
+            ':appt_name' => $_POST['appt_name'],  
+            ':time' => $_POST['time'],
+            ':date' => $_POST['date'],
+            ':detail' => $_POST['detail'],
+            ':user_id' => $_SESSION['user']['id'],
+            ':appt_for' => "doctor"
+        ); 
+         
+        try 
+        { 
+            // Execute the query to create the user 
+            $stmt = $db->prepare($query); 
+            $result = $stmt->execute($query_params); 
+        } 
+        catch(PDOException $ex) 
+        { 
+            die("Failed to run query: " . $ex->getMessage()); 
+        } 
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -28,11 +69,11 @@
       <div class="masthead">
         <h3 class="text-muted">WebDoc</h3>
         <ul class="nav nav-justified">
-          <li class="active"><a href="user.php">Home</a></li>
-          <li class="dropdown">
+          <li ><a href="user.php">Home</a></li>
+          <li class="active" class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Get Appointment<b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="view_appt.php">View your Appointment</a></li>
+             <li><a href="view_appt.php">View your Appointment</a></li>
               <li class="divider"></li>
               <li><a href="appt_vac.php">Appointment for Vaccination</a></li>
               <li class="divider"></li>
@@ -71,33 +112,57 @@
         </ul>
       </div>
 
-      <!-- Jumbotron -->
-      <div class="jumbotron">
-        <h1>WebDoctor!</h1>
-        <p class="lead">Discover treatment options with the new <b>Symptom Checker</b> </p>
-        <p>This interactive decision guide helps identify the underlying cause of common symptoms.</p>
-        <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
-      </div>
+     <form class="form-horizontal" action="appt_doc.php" method="post">
+<fieldset>
 
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-lg-4">
-          <h2>Safari bug warning!</h2>
-          <p class="text-danger">As of v7.0.1, Safari exhibits a bug in which resizing your browser horizontally causes rendering errors in the justified nav that are cleared upon refreshing.</p>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
-        </div>
-        <div class="col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
-       </div>
-        <div class="col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
-          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
-        </div>
-      </div>
+<!-- Form Name -->
+<legend>Create Appointment for Doctor </legend>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="appt_name">Appt. Name</label>  
+  <div class="col-md-4">
+  <input id="appt_name" name="appt_name" type="text" placeholder="" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="time">Time</label>  
+  <div class="col-md-4">
+  <input id="time" name="time" type="text" placeholder="e.g 11:12:30" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="date">Date</label>  
+  <div class="col-md-4">
+  <input id="date" name="date" type="text" placeholder="2014-04-15" class="form-control input-md">
+    
+  </div>
+</div>
+
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="detail">Detail</label>
+  <div class="col-md-4">                     
+    <textarea class="form-control" id="detail" name="detail"></textarea>
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="submit"></label>
+  <div class="col-md-4">
+    <button id="submit" name="submit" class="btn btn-info">submit</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
 
       <!-- Site footer -->
       <div class="footer">

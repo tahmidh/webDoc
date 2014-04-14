@@ -2,9 +2,7 @@
     require("common.php"); 
 
     $submitted_username = ''; 
-     
-    // This if statement checks to determine whether the login form has been submitted 
-    // If it has, then the login code is run, otherwise the form is displayed 
+
     if(!empty($_POST)) 
     { 
         $query = " 
@@ -52,20 +50,15 @@
         { 
             unset($row['salt']); 
             unset($row['password']); 
-             
-            // This stores the user's data into the session at the index 'user'. 
-            // We will check this index on the private members-only page to determine whether 
-            // or not the user is logged in.  We can also use it to retrieve 
-            // the user's details. 
+              
             $_SESSION['user'] = $row; 
-             
-            // Redirect the user to the private members-only page. 
+              
             header("Location: user.php"); 
             die("Redirecting to: user.php"); 
         } 
         else 
         { 
-            // Tell the user they failed 
+           
             print('<div class="error">');
             print("<p>Login Failed.</p>"); 
             print("</div>"); 

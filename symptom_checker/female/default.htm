@@ -11,10 +11,10 @@
     <title>WebDoc - Better Health, Better Life</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="http://localhost/webDoc/css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="../css/justified-nav.css" rel="stylesheet">
+    <link href="http://localhost/webDoc/css/justified-nav.css" rel="stylesheet">
   </head>
 
   <body>
@@ -24,47 +24,51 @@
       <div class="masthead">
         <h3 class="text-muted">WebDoc</h3>
         <ul class="nav nav-justified">
-          <li><a href="../index.php">Home</a></li>
-          <li><a href="../">Health A-Z</a></li>
-          <li class="active"><a href="default.htm">Symptom Checker</a></li>
-          <li><a href="../">About</a></li>
-          <li><a href="../contact.php">Contact</a></li>
-          <li><a href="../register.php">Create Account</a></li>
-          <li><a href="../login.php">Login</a></li>
+          <li><a href="/webDoc/index.php">Home</a></li>
+          <li><a href="/webDoc/">Health A-Z</a></li>
+          <li class="active"><a href="/webDoc/symptom_checker/">Symptom Checker</a></li>
+          <li><a href="/webDoc/">About</a></li>
+          <li><a href="/webDoc/contact.php">Contact</a></li>
+          <li><a href="/webDoc/register.php">Create Account</a></li>
+          <li><a href="/webDoc/login.php">Login</a></li>
         </ul>
       </div>
 
       <!-- Jumbotron -->
       <div class="jumbotron">
-        <h2>from female</h2>
+        <h2>Symptom Checker : Female</h2>
           <div class='well' style="background:#B7CFE4">
-            <p class='intro'><b>Introduction:</b> Symptom Checker to help you understand your medical symptoms and make informed decisions about your health and wellness. See what your medical symptoms could mean, and learn about possible conditions.</p>
             <div class='' style='position: relative;'>
               <form role="form" action='symptom_checker' method='get'>
               <div class='panel panel-default' style='float:left; width:690px;'>
-                <div class="panel-heading"><h3>Get Started</h3></div>
+                <div class="panel-heading"></div>
                 <div class="panel-body">
-                    <p style='line-height: 1.4;'>Select man, women or child below. You may then select a part of the body where symptoms occur.</p>
+                    <p style='line-height: 1.4;'>Select a body part where you are experiencing symptoms.</p>
                 </div>
 
                 <ul class="list-group">
-                  <li class='list-group-item'><a href='male/' onmouseover="showBody('male');" onmouseout="showBody('');">Man</a></li>
-                  <li class='list-group-item'><a href='female/' onmouseover="showBody('female');" onmouseout="showBody('');">Woman</a></li>
-                  <li class='list-group-item'><a href='child/' onmouseover="showBody('child');" onmouseout="showBody('');">Child</a></li>
+                  <li class='list-group-item'><a href='' onmouseover="showBody('');" onmouseout="showBody('');">Head and Neck</a></li>
+                  <li class='list-group-item'><a href='' onmouseover="showBody('');" onmouseout="showBody('');">Eyes</a></li>
+                  <li class='list-group-item'><a href='' onmouseover="showBody('');" onmouseout="showBody('');">Ear, Nose, Throat</a></li>
+                  <li class='list-group-item'><a href='' onmouseover="showBody('');" onmouseout="showBody('');">Chest and Back</a></li>
+                  <li class='list-group-item'><a href='' onmouseover="showBody('');" onmouseout="showBody('');">Arms and Hands</a></li>
+                  <li class='list-group-item'><a href='' onmouseover="showBody('');" onmouseout="showBody('');">Abdomen and Pelvis</a></li>
+                  <li class='list-group-item'><a href='' onmouseover="showBody('');" onmouseout="showBody('');">Legs and Feet</a></li>
                 </ul>
               </div>
               </form>
               <div >
-                <img id='bodyModel' alt='' src='img/family.jpg' width='252' height='400' />
-                <img alt='' src='img/family_male.jpg' width='252' height='400' style='position: absolute; left: -5000px;' /> 
-                <img alt='' src='img/family_female.jpg' width='252' height='400' style='position: absolute; left: -5000px;' /> 
-                <img alt='' src='img/family_child.jpg' width='252' height='400' style='position: absolute; left: -5000px;' />
+                <img id='bodyModel' alt='' src='female.jpg' width='252' height='400' />
+                <img alt='' src='female.jpg' width='252' height='400' style='position: absolute; left: -5000px;' /> 
+                <img alt='' src='female.jpg' width='252' height='400' style='position: absolute; left: -5000px;' /> 
+                <img alt='' src='female.jpg' width='252' height='400' style='position: absolute; left: -5000px;' />
               </div>
             </div>
           </div>
           <p style='font-size:13px;'><b>Disclaimer:</b> This content should not be considered complete and should not be used in place of a call or visit to a health professional.</p>
       </div>
       <script>
+      /*
       function showBody(type)
       {
         var src = type.length;
@@ -75,6 +79,7 @@
         }
         $('#bodyModel').attr('src', src)
       }
+      */
     </script>
 
       <!-- Site footer -->
@@ -89,8 +94,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="../js/jquery.min.js"></script>
+    <script src="http://localhost/webDoc/js/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="../js/bootstrap.min.js"></script>
+    <script src="http://localhost/webDoc/js/bootstrap.min.js"></script>
   </body>
 </html>
